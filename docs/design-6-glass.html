@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinemana Downloader | سينمانا داونلودر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-bg-hover: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            direction: ltr;
+        }
+
+        body[lang="ar"] {
+            direction: rtl;
+            font-family: 'Sora', 'Inter', sans-serif;
+        }
+
+        /* Animated Background Orbs */
+        .bg-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 107, 107, 0.3);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(78, 205, 196, 0.3);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 195, 113, 0.25);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+        }
+
+        .orb-4 {
+            width: 300px;
+            height: 300px;
+            background: rgba(167, 119, 227, 0.3);
+            top: 30%;
+            right: 20%;
+            animation-delay: -15s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(40px, 40px) scale(1.05); }
+        }
+
+        /* Glass Effect Mixin */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        }
+
+        .glass-subtle {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(102, 126, 234, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .nav-title {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .lang-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Sora', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(135deg, #feca57, #ff6b6b, #f8a5c2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .hero-subtitle-ar {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease 0.25s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .btn-glass {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.25rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .extension-card {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .extension-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #4ade80, #667eea);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .card-title {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .card-version {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .card-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .card-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+        }
+
+        .card-features li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(74, 222, 128, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4ade80;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .card-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .card-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15));
+            transform: translateY(-2px);
+        }
+
+        .floating-badge {
+            position: absolute;
+            padding: 0.75rem 1.25rem;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            animation: float-badge 3s ease-in-out infinite;
+        }
+
+        .badge-free {
+            top: -20px;
+            right: -20px;
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.3), rgba(74, 222, 128, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+            animation-delay: 0s;
+        }
+
+        .badge-chrome {
+            bottom: 20px;
+            left: -30px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(102, 126, 234, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #a5b4fc;
+            animation-delay: -1.5s;
+        }
+
+        @keyframes float-badge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Features Section */
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon.download {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(255, 107, 107, 0.1));
+        }
+
+        .feature-icon.subtitles {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.3), rgba(78, 205, 196, 0.1));
+        }
+
+        .feature-icon.quality {
+            background: linear-gradient(135deg, rgba(254, 202, 87, 0.3), rgba(254, 202, 87, 0.1));
+        }
+
+        .feature-icon.fast {
+            background: linear-gradient(135deg, rgba(167, 119, 227, 0.3), rgba(167, 119, 227, 0.1));
+        }
+
+        .feature-icon.safe {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.3), rgba(74, 222, 128, 0.1));
+        }
+
+        .feature-icon.easy {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.3), rgba(96, 165, 250, 0.1));
+        }
+
+        .feature-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-title-ar {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .steps-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .step-card {
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateX(-8px);
+            background: var(--glass-bg-hover);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(254, 202, 87, 0.3));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .step-content h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Install Section */
+        .install-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .install-card {
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .install-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #ff6b6b, #feca57);
+        }
+
+        .install-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .install-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .install-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .install-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .install-step {
+            padding: 1.5rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .install-step-num {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .install-step h4 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .install-step p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .install-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1.125rem;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: var(--text-primary);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .install-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+            transform: translateY(-3px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        /* FAQ Section */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: var(--glass-bg-hover);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 2rem;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Sora', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question[dir="rtl"] {
+            text-align: right;
+        }
+
+        .faq-arrow {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-brand-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .footer-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-desc {
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-column h4 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text {
+                order: 1;
+            }
+
+            .hero-visual {
+                order: 2;
+            }
+
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .install-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .step-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-brand {
+                align-items: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .floating-badge {
+                display: none;
+            }
+        }
+
+        /* Smooth Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Orbs -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <a href="#" class="nav-brand">
+                <div class="nav-logo">🎬</div>
+                <span class="nav-title">Cinemana</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features" data-en="Features" data-ar="المميزات">Features</a></li>
+                <li><a href="#how-it-works" data-en="How It Works" data-ar="كيف يعمل">How It Works</a></li>
+                <li><a href="#install" data-en="Install" data-ar="التثبيت">Install</a></li>
+                <li><a href="#faq" data-en="FAQ" data-ar="الأسئلة الشائعة">FAQ</a></li>
+            </ul>
+            <button class="lang-toggle" id="langToggle">عربي</button>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge glass">
+                    <span class="badge-dot"></span>
+                    <span data-en="Free & Open Source" data-ar="مجاني ومفتوح المصدر">Free & Open Source</span>
+                </div>
+                <h1 class="hero-title">
+                    <span data-en="Download Videos from" data-ar="حمّل الفيديوهات من">Download Videos from</span><br>
+                    <span class="gradient-text">Cinemana</span>
+                </h1>
+                <p class="hero-subtitle" data-en="The ultimate Chrome extension that lets you download videos and subtitles directly from cinemana.shabakaty.com with just one click." data-ar="الإضافة المثالية لجوجل كروم التي تتيح لك تحميل الفيديوهات والترجمات مباشرة من cinemana.shabakaty.com بنقرة واحدة فقط.">
+                    The ultimate Chrome extension that lets you download videos and subtitles directly from cinemana.shabakaty.com with just one click.
+                </p>
+                <p class="hero-subtitle-ar" dir="rtl">
+                    الإضافة المثالية لجوجل كروم التي تتيح لك تحميل الفيديوهات والترجمات مباشرة من cinemana.shabakaty.com بنقرة واحدة فقط.
+                </p>
+                <div class="hero-actions">
+                    <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="btn-glass btn-primary" download>
+                        <span class="btn-icon">⬇️</span>
+                        <span data-en="Download Now" data-ar="حمّل الآن">Download Now</span>
+                    </a>
+                    <a href="https://github.com/muhammadALI-14/cinemana-downloader" class="btn-glass btn-secondary" target="_blank">
+                        <span class="btn-icon">⭐</span>
+                        <span data-en="GitHub" data-ar="جيتهب">GitHub</span>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label" data-en="Free" data-ar="مجاني">Free</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4K</div>
+                        <div class="stat-label" data-en="Quality" data-ar="جودة عالية">Quality</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">v1.0</div>
+                        <div class="stat-label" data-en="Latest" data-ar="أحدث إصدار">Latest</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-badge badge-free glass">
+                    ✨ <span data-en="Free Forever" data-ar="مجاني للأبد">Free Forever</span>
+                </div>
+                <div class="floating-badge badge-chrome glass">
+                    🌐 <span data-en="Chrome Extension" data-ar="إضافة كروم">Chrome Extension</span>
+                </div>
+                <div class="extension-card glass-strong">
+                    <div class="card-header">
+                        <div class="card-icon">🎬</div>
+                        <div>
+                            <div class="card-title">Cinemana Downloader</div>
+                            <div class="card-version">v1.0.0 • Chrome Extension</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span data-en="Download videos in HD quality" data-ar="تحميل الفيديوهات بجودة عالية">Download videos in HD quality</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span data-en="Download subtitles in multiple languages" data-ar="تحميل الترجمة بلغات متعددة">Download subtitles in multiple languages</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span data-en="One-click download button" data-ar="زر تحميل بنقرة واحدة">One-click download button</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span data-en="Lightweight & fast performance" data-ar="خفيف وسريع الأداء">Lightweight & fast performance</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span data-en="Safe & ad-free experience" data-ar="آمن وتجربة بدون إعلانات">Safe & ad-free experience</span>
+                        </li>
+                    </ul>
+                    <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="card-btn" download>
+                        <span data-en="Download Extension" data-ar="تحميل الإضافة">Download Extension</span>
+                        <span>⬇️</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="section-header reveal">
+            <span class="section-label glass" data-en="Features" data-ar="المميزات">Features</span>
+            <h2 class="section-title" data-en="Why Choose Cinemana Downloader?" data-ar="لماذا تختار سينمانا داونلودر؟">Why Choose Cinemana Downloader?</h2>
+            <p class="section-subtitle" data-en="Everything you need to download your favorite content from Cinemana, all in one powerful extension." data-ar="كل ما تحتاجه لتحميل المحتوى المفضل لديك من سينمانا، في إضافة واحدة قوية.">
+                Everything you need to download your favorite content from Cinemana, all in one powerful extension.
+            </p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card glass reveal">
+                <div class="feature-icon download">⬇️</div>
+                <h3 class="feature-title" data-en="Video Download" data-ar="تحميل الفيديو">Video Download</h3>
+                <p class="feature-title-ar" dir="rtl">تحميل الفيديو</p>
+                <p class="feature-desc" data-en="Download any video from Cinemana in the best available quality with a single click." data-ar="حمّل أي فيديو من سينمانا بأفضل جودة متاحة بنقرة واحدة.">
+                    Download any video from Cinemana in the best available quality with a single click.
+                </p>
+            </div>
+            <div class="feature-card glass reveal">
+                <div class="feature-icon subtitles">💬</div>
+                <h3 class="feature-title" data-en="Subtitle Download" data-ar="تحميل الترجمة">Subtitle Download</h3>
+                <p class="feature-title-ar" dir="rtl">تحميل الترجمة</p>
+                <p class="feature-desc" data-en="Get subtitles in Arabic, English, and many other languages for your downloaded content." data-ar="احصل على ترجمة بالعربية والإنجليزية ولغات أخرى كثيرة للمحتوى الذي تقوم بتحميله.">
+                    Get subtitles in Arabic, English, and many other languages for your downloaded content.
+                </p>
+            </div>
+            <div class="feature-card glass reveal">
+                <div class="feature-icon quality">🎯</div>
+                <h3 class="feature-title" data-en="Quality Selection" data-ar="اختيار الجودة">Quality Selection</h3>
+                <p class="feature-title-ar" dir="rtl">اختيار الجودة</p>
+                <p class="feature-desc" data-en="Choose from multiple video quality options to match your storage and bandwidth needs." data-ar="اختر من بين خيارات جودة فيديو متعددة لتتناسب مع احتياجاتك من التخزين وسرعة الإنترنت.">
+                    Choose from multiple video quality options to match your storage and bandwidth needs.
+                </p>
+            </div>
+            <div class="feature-card glass reveal">
+                <div class="feature-icon fast">⚡</div>
+                <h3 class="feature-title" data-en="Fast Downloads" data-ar="تحميل سريع">Fast Downloads</h3>
+                <p class="feature-title-ar" dir="rtl">تحميل سريع</p>
+                <p class="feature-desc" data-en="Optimized download engine ensures you get your content as quickly as possible." data-ar="محرك تحميل محسّن يضمن لك الحصول على المحتوى الخاص بك بأسرع وقت ممكن.">
+                    Optimized download engine ensures you get your content as quickly as possible.
+                </p>
+            </div>
+            <div class="feature-card glass reveal">
+                <div class="feature-icon safe">🛡️</div>
+                <h3 class="feature-title" data-en="Safe & Secure" data-ar="آمن وموثوق">Safe & Secure</h3>
+                <p class="feature-title-ar" dir="rtl">آمن وموثوق</p>
+                <p class="feature-desc" data-en="No ads, no tracking, no malware. Your privacy and security are our top priority." data-ar="بدون إعلانات، بدون تتبع، بدون برامج خبيثة. خصوصيتك وأمانك هما أولويتنا القصوى.">
+                    No ads, no tracking, no malware. Your privacy and security are our top priority.
+                </p>
+            </div>
+            <div class="feature-card glass reveal">
+                <div class="feature-icon easy">🔧</div>
+                <h3 class="feature-title" data-en="Easy to Use" data-ar="سهل الاستخدام">Easy to Use</h3>
+                <p class="feature-title-ar" dir="rtl">سهل الاستخدام</p>
+                <p class="feature-desc" data-en="Simple and intuitive interface. No technical knowledge required to get started." data-ar="واجهة بسيطة وسهلة. لا يتطلب أي معرفة تقنية للبدء.">
+                    Simple and intuitive interface. No technical knowledge required to get started.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section" id="how-it-works">
+        <div class="section-header reveal">
+            <span class="section-label glass" data-en="How It Works" data-ar="كيف يعمل">How It Works</span>
+            <h2 class="section-title" data-en="Simple as 1-2-3" data-ar="بسيط كالعد من واحد إلى ثلاثة">Simple as 1-2-3</h2>
+            <p class="section-subtitle" data-en="Get started in minutes with our easy installation process." data-ar="ابدأ في دقائق مع عملية التثبيت السهلة.">
+                Get started in minutes with our easy installation process.
+            </p>
+        </div>
+        <div class="steps-container">
+            <div class="step-card glass reveal">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 data-en="Download the Extension" data-ar="حمّل الإضافة">Download the Extension</h3>
+                    <p data-en="Click the download button to get the latest version of Cinemana Downloader." data-ar="انقر على زر التحميل للحصول على أحدث إصدار من سينمانا داونلودر.">
+                        Click the download button to get the latest version of Cinemana Downloader.
+                    </p>
+                </div>
+            </div>
+            <div class="step-card glass reveal">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 data-en="Install in Chrome" data-ar="التثبيت في كروم">Install in Chrome</h3>
+                    <p data-en="Open chrome://extensions, enable Developer Mode, and drag the extension file." data-ar="افتح chrome://extensions،فعّل وضع المطور، واسحب ملف الإضافة.">
+                        Open chrome://extensions, enable Developer Mode, and drag the extension file.
+                    </p>
+                </div>
+            </div>
+            <div class="step-card glass reveal">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 data-en="Start Downloading!" data-ar="ابدأ التحميل!">Start Downloading!</h3>
+                    <p data-en="Visit Cinemana, find your video, and click the download button that appears." data-ar="قم بزيارة سينمانا، ابحث عن الفيديو، واضغط على زر التحميل الذي يظهر.">
+                        Visit Cinemana, find your video, and click the download button that appears.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Install Section -->
+    <section class="section" id="install">
+        <div class="install-container reveal">
+            <div class="install-card glass-strong">
+                <div class="install-icon">📥</div>
+                <h2 class="install-title" data-en="Ready to Download?" data-ar="مستعد للتحميل؟">Ready to Download?</h2>
+                <p class="install-subtitle" data-en="Get the latest version of Cinemana Downloader and start saving your favorite content today." data-ar="احصل على أحدث إصدار من سينمانا داونلودر وابدأ في حفظ المحتوى المفضل لديك اليوم.">
+                    Get the latest version of Cinemana Downloader and start saving your favorite content today.
+                </p>
+                <div class="install-steps">
+                    <div class="install-step">
+                        <div class="install-step-num">1</div>
+                        <h4 data-en="Download" data-ar="تحميل">Download</h4>
+                        <p data-en="Get the .zip file" data-ar="احصل على ملف الـ zip">Get the .zip file</p>
+                    </div>
+                    <div class="install-step">
+                        <div class="install-step-num">2</div>
+                        <h4 data-en="Extract" data-ar="فك الضغط">Extract</h4>
+                        <p data-en="Unzip the contents" data-ar="استخرج المحتوى">Unzip the contents</p>
+                    </div>
+                    <div class="install-step">
+                        <div class="install-step-num">3</div>
+                        <h4 data-en="Load" data-ar="تحميل">Load</h4>
+                        <p data-en="Load in Chrome" data-ar="حمّل في كروم">Load in Chrome</p>
+                    </div>
+                </div>
+                <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="install-btn" download>
+                    <span>⬇️</span>
+                    <span data-en="Download v1.0.0" data-ar="تحميل الإصدار 1.0.0">Download v1.0.0</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq">
+        <div class="section-header reveal">
+            <span class="section-label glass" data-en="FAQ" data-ar="الأسئلة الشائعة">FAQ</span>
+            <h2 class="section-title" data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة">Frequently Asked Questions</h2>
+            <p class="section-subtitle" data-en="Find answers to common questions about Cinemana Downloader." data-ar="ابحث عن إجابات للأسئلة الشائعة حول سينمانا داونلودر.">
+                Find answers to common questions about Cinemana Downloader.
+            </p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item glass reveal">
+                <button class="faq-question" data-en="Is Cinemana Downloader free?" data-ar="هل سينمانا داونلودر مجاني؟">
+                    <span>Is Cinemana Downloader free?</span>
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content" data-en="Yes, Cinemana Downloader is completely free and open source. There are no hidden charges, subscriptions, or in-app purchases." data-ar="نعم، سينمانا داونلودر مجاني تمامًا ومفتوح المصدر. لا توجد رسوم خفية أو اشتراكات أو مشتريات داخل التطبيق.">
+                        Yes, Cinemana Downloader is completely free and open source. There are no hidden charges, subscriptions, or in-app purchases.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item glass reveal">
+                <button class="faq-question" data-en="Which browsers are supported?" data-ar="أي المتصفحات مدعومة؟">
+                    <span>Which browsers are supported?</span>
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content" data-en="Cinemana Downloader is a Chrome extension and works with Google Chrome and other Chromium-based browsers like Brave, Edge, and Opera." data-ar="سينمانا داونلودر إضافة كروم وتعمل مع جوجل كروم والمتصفحات الأخرى القائمة على كروم مثل بريف وبريدج وأوبرا.">
+                        Cinemana Downloader is a Chrome extension and works with Google Chrome and other Chromium-based browsers like Brave, Edge, and Opera.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item glass reveal">
+                <button class="faq-question" data-en="How do I install the extension?" data-ar="كيف أثبّت الإضافة؟">
+                    <span>How do I install the extension?</span>
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content" data-en="Download the .zip file, extract it, open chrome://extensions, enable Developer Mode, click 'Load unpacked', and select the extracted folder." data-ar="حمّل ملف الـ zip، استخرجه، افتح chrome://extensions، فعّل وضع المطور، انقر على 'تحميل غير مضغوط"، واختر المجلد المستخرج.">
+                        Download the .zip file, extract it, open chrome://extensions, enable Developer Mode, click 'Load unpacked', and select the extracted folder.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item glass reveal">
+                <button class="faq-question" data-en="Is my data safe?" data-ar="هل بياناتي آمنة؟">
+                    <span>Is my data safe?</span>
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content" data-en="Absolutely! Cinemana Downloader does not collect, store, or transmit any personal data. It only adds download functionality to the Cinemana website." data-ar="بالتأكيد! سينمانا داونلودر لا يجمع أو يخزن أو ينقل أي بيانات شخصية. إنه فقط يضيف وظيفة التحميل إلى موقع سينمانا.">
+                        Absolutely! Cinemana Downloader does not collect, store, or transmit any personal data. It only adds download functionality to the Cinemana website.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item glass reveal">
+                <button class="faq-question" data-en="Can I download subtitles?" data-ar="هل يمكنني تحميل الترجمة؟">
+                    <span>Can I download subtitles?</span>
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content" data-en="Yes! Cinemana Downloader supports downloading subtitles in multiple languages including Arabic and English." data-ar="نعم! سينمانا داونلودر يدعم تحميل الترجمة بلغات متعددة بما في ذلك العربية والإنجليزية.">
+                        Yes! Cinemana Downloader supports downloading subtitles in multiple languages including Arabic and English.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-brand-name">
+                        <div class="footer-logo">🎬</div>
+                        <span class="footer-title">Cinemana Downloader</span>
+                    </div>
+                    <p class="footer-desc" data-en="The best Chrome extension for downloading videos and subtitles from Cinemana. Free, fast, and secure." data-ar="أفضل إضافة لجوجل كروم لتحميل الفيديوهات والترجمات من سينمانا. مجانية وسريعة وآمنة.">
+                        The best Chrome extension for downloading videos and subtitles from Cinemana. Free, fast, and secure.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h4 data-en="Product" data-ar="المنتج">Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features" data-en="Features" data-ar="المميزات">Features</a></li>
+                        <li><a href="#install" data-en="Download" data-ar="تحميل">Download</a></li>
+                        <li><a href="#faq" data-en="FAQ" data-ar="الأسئلة الشائعة">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 data-en="Resources" data-ar="الموارد">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/muhammadALI-14/cinemana-downloader" target="_blank" data-en="GitHub" data-ar="جيتهب">GitHub</a></li>
+                        <li><a href="https://github.com/muhammadALI-14/cinemana-downloader/releases" target="_blank" data-en="Releases" data-ar="الإصدارات">Releases</a></li>
+                        <li><a href="https://github.com/muhammadALI-14/cinemana-downloader/issues" target="_blank" data-en="Report Issue" data-ar="الإبلاغ عن مشكلة">Report Issue</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 data-en="Legal" data-ar="قانوني">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a></li>
+                        <li><a href="#" data-en="Terms of Use" data-ar="شروط الاستخدام">Terms of Use</a></li>
+                        <li><a href="#" data-en="License" data-ar="الرخصة">License</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright" data-en="© 2024 Cinemana Downloader. All rights reserved." data-ar="© 2024 سينمانا داونلودر. جميع الحقوق محفوظة.">
+                    © 2024 Cinemana Downloader. All rights reserved.
+                </p>
+                <div class="footer-socials">
+                    <a href="https://github.com/muhammadALI-14/cinemana-downloader" class="social-link glass" target="_blank" aria-label="GitHub">
+                        <span>⭐</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Language toggle
+        const langToggle = document.getElementById('langToggle');
+        let isArabic = false;
+
+        langToggle.addEventListener('click', () => {
+            isArabic = !isArabic;
+            document.documentElement.lang = isArabic ? 'ar' : 'en';
+            document.documentElement.dir = isArabic ? 'rtl' : 'ltr';
+            document.body.dir = isArabic ? 'rtl' : 'ltr';
+            document.body.lang = isArabic ? 'ar' : 'en';
+            langToggle.textContent = isArabic ? 'English' : 'عربي';
+
+            // Update content
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const text = isArabic ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+                if (text) {
+                    // Handle elements with both span and parent text
+                    const span = el.querySelector('span');
+                    if (span) {
+                        span.textContent = text;
+                    } else {
+                        el.textContent = text;
+                    }
+                }
+            });
+
+            // Handle FAQ questions
+            document.querySelectorAll('.faq-question').forEach(btn => {
+                const text = isArabic ? btn.getAttribute('data-ar') : btn.getAttribute('data-en');
+                if (text) {
+                    const span = btn.querySelector('span');
+                    if (span) {
+                        span.textContent = text;
+                    }
+                }
+            });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                });
+                
+                // Open clicked (if it wasn't active)
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.padding = '1rem';
+            navLinks.style.background = 'rgba(102, 126, 234, 0.95)';
+            navLinks.style.backdropFilter = 'blur(20px)';
+            navLinks.style.borderRadius = '0 0 16px 16px';
+        });
+
+        // Parallax effect for orbs
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            document.querySelectorAll('.orb').forEach((orb, index) => {
+                const speed = (index + 1) * 10;
+                const x = (mouseX - 0.5) * speed;
+                const y = (mouseY - 0.5) * speed;
+                orb.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
