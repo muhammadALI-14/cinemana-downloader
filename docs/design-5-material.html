@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinemana Downloader - سينمانا داونلودر</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --primary-light: #4a90e4;
+            --accent: #ea4335;
+            --accent-dark: #c5221f;
+            --surface: #ffffff;
+            --background: #f8f9fa;
+            --on-surface: #202124;
+            --on-surface-variant: #5f6368;
+            --outline: #dadce0;
+            --elevation-1: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+            --elevation-2: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
+            --elevation-3: 0 4px 8px 3px rgba(60,64,67,.15), 0 1px 3px rgba(60,64,67,.3);
+            --elevation-4: 0 6px 10px 4px rgba(60,64,67,.15), 0 2px 3px rgba(60,64,67,.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--background);
+            color: var(--on-surface);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ripple Effect */
+        .ripple-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            box-shadow: var(--elevation-2);
+            z-index: 1000;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--elevation-3);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--on-surface);
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .nav-title {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0.15px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--on-surface-variant);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a:hover {
+            background: rgba(26, 115, 232, 0.08);
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            background: rgba(26, 115, 232, 0.12);
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 24px 60px;
+            background: linear-gradient(135deg, #e8f0fe 0%, #f8f9fa 50%, #fce8e6 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(26, 115, 232, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(234, 67, 53, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: var(--elevation-1);
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .hero-badge .material-icons {
+            font-size: 18px;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--on-surface);
+            margin-bottom: 8px;
+            letter-spacing: -0.25px;
+        }
+
+        .hero-title-ar {
+            font-size: 40px;
+            color: var(--on-surface-variant);
+            margin-bottom: 24px;
+            font-weight: 300;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: var(--on-surface-variant);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.25px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--elevation-1);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: var(--elevation-2);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: var(--elevation-1);
+        }
+
+        .btn-outlined {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--outline);
+        }
+
+        .btn-outlined:hover {
+            background: rgba(26, 115, 232, 0.04);
+            border-color: var(--primary);
+        }
+
+        .btn .material-icons {
+            font-size: 20px;
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .extension-preview {
+            width: 100%;
+            max-width: 480px;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--elevation-4);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            background: var(--primary);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .preview-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .preview-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .preview-dot.red { background: #ea4335; }
+        .preview-dot.yellow { background: #fbbc04; }
+        .preview-dot.green { background: #34a853; }
+
+        .preview-title {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+        }
+
+        .preview-body {
+            padding: 24px;
+        }
+
+        .preview-url-bar {
+            background: var(--background);
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--outline);
+        }
+
+        .preview-url-bar .material-icons {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .preview-url {
+            flex: 1;
+            font-size: 13px;
+            color: var(--on-surface-variant);
+            direction: ltr;
+            text-align: left;
+        }
+
+        .preview-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--outline);
+        }
+
+        .preview-feature:last-child {
+            border-bottom: none;
+        }
+
+        .preview-feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .preview-feature-icon.blue {
+            background: #e8f0fe;
+            color: var(--primary);
+        }
+
+        .preview-feature-icon.red {
+            background: #fce8e6;
+            color: var(--accent);
+        }
+
+        .preview-feature-icon.green {
+            background: #e6f4ea;
+            color: #34a853;
+        }
+
+        .preview-feature-text h4 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .preview-feature-text p {
+            font-size: 12px;
+            color: var(--on-surface-variant);
+        }
+
+        /* Sections */
+        .section {
+            padding: 100px 24px;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-overline {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 400;
+            color: var(--on-surface);
+            margin-bottom: 8px;
+        }
+
+        .section-title-ar {
+            font-size: 28px;
+            color: var(--on-surface-variant);
+            font-weight: 300;
+            margin-bottom: 16px;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: var(--on-surface-variant);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features */
+        .features-section {
+            background: var(--surface);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--background);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--outline);
+        }
+
+        .feature-card:hover {
+            box-shadow: var(--elevation-2);
+            transform: translateY(-4px);
+            border-color: transparent;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon .material-icons {
+            font-size: 28px;
+            color: white;
+        }
+
+        .feature-icon.blue {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        .feature-icon.red {
+            background: linear-gradient(135deg, var(--accent), #f07067);
+        }
+
+        .feature-icon.green {
+            background: linear-gradient(135deg, #34a853, #5cb85c);
+        }
+
+        .feature-icon.purple {
+            background: linear-gradient(135deg, #9334e6, #b44cf0);
+        }
+
+        .feature-icon.orange {
+            background: linear-gradient(135deg, #fa7b17, #f9ab00);
+        }
+
+        .feature-icon.teal {
+            background: linear-gradient(135deg, #00897b, #26a69a);
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--on-surface);
+            margin-bottom: 8px;
+        }
+
+        .feature-title-ar {
+            font-size: 16px;
+            color: var(--on-surface-variant);
+            margin-bottom: 12px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+            line-height: 1.6;
+        }
+
+        /* Installation */
+        .installation-section {
+            background: var(--background);
+        }
+
+        .installation-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .installation-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .step-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--elevation-1);
+            display: flex;
+            gap: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--outline);
+        }
+
+        .step-card:hover {
+            box-shadow: var(--elevation-2);
+            border-color: var(--primary);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .step-content h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--on-surface);
+            margin-bottom: 4px;
+        }
+
+        .step-content h3 span {
+            color: var(--on-surface-variant);
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+            line-height: 1.5;
+        }
+
+        .installation-visual {
+            position: sticky;
+            top: 100px;
+        }
+
+        .download-card {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--elevation-3);
+            text-align: center;
+        }
+
+        .download-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 24px rgba(26, 115, 232, 0.3);
+        }
+
+        .download-icon .material-icons {
+            font-size: 40px;
+            color: white;
+        }
+
+        .download-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--on-surface);
+            margin-bottom: 8px;
+        }
+
+        .download-title-ar {
+            font-size: 18px;
+            color: var(--on-surface-variant);
+            margin-bottom: 24px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--primary);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: var(--elevation-2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 8px 24px rgba(26, 115, 232, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .download-btn .material-icons {
+            font-size: 24px;
+        }
+
+        .download-info {
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--on-surface-variant);
+        }
+
+        .download-info .material-icons {
+            font-size: 16px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        /* How it Works */
+        .how-it-works {
+            background: var(--surface);
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            position: relative;
+        }
+
+        .workflow-steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--outline);
+            z-index: 0;
+        }
+
+        .workflow-step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .workflow-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--surface);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: var(--elevation-1);
+        }
+
+        .workflow-icon .material-icons {
+            font-size: 36px;
+            color: var(--primary);
+        }
+
+        .workflow-step h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .workflow-step p {
+            font-size: 14px;
+            color: var(--on-surface-variant);
+        }
+
+        /* Footer */
+        .footer {
+            background: #202124;
+            color: white;
+            padding: 60px 24px 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand h3 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: #9aa0a6;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-links h4 {
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #9aa0a6;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            width: 44px;
+            height: 44px;
+            background: #303134;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .social-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .social-btn .material-icons {
+            font-size: 22px;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid #303134;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: #9aa0a6;
+        }
+
+        .footer-bottom a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 32px;
+            left: 32px;
+            width: 56px;
+            height: 56px;
+            background: var(--accent);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--elevation-3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 999;
+            text-decoration: none;
+            border: none;
+        }
+
+        .fab:hover {
+            background: var(--accent-dark);
+            box-shadow: 0 8px 24px rgba(234, 67, 53, 0.4);
+            transform: scale(1.1);
+        }
+
+        .fab .material-icons {
+            font-size: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin: 0 auto 40px;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .installation-content {
+                grid-template-columns: 1fr;
+            }
+
+            .installation-visual {
+                position: static;
+            }
+
+            .workflow-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .workflow-steps::before {
+                display: none;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-title-ar {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <a href="#" class="nav-brand">
+                <div class="nav-logo">
+                    <span class="material-icons">play_circle</span>
+                </div>
+                <span class="nav-title">Cinemana Downloader</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features" class="active ripple-container">Features</a></li>
+                <li><a href="#installation" class="ripple-container">Installation</a></li>
+                <li><a href="#how-it-works" class="ripple-container">How it Works</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="material-icons">extension</span>
+                    Chrome Extension
+                </div>
+                <h1 class="hero-title">Cinemana Downloader</h1>
+                <p class="hero-title-ar">سينمانا داونلودر</p>
+                <p class="hero-description">
+                    Download videos and subtitles directly from cinemana.shabakaty.com with just one click. Simple, fast, and free.
+                </p>
+                <p class="hero-description" style="font-size: 16px; color: #5f6368; margin-top: -20px;">
+                    قم بتنزيل الفيديوهات والترجمات مباشرة من cinemana.shabakaty.com بنقرة واحدة. بسيط وسريع ومجاني.
+                </p>
+                <div class="hero-actions">
+                    <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="btn btn-primary ripple-container" download>
+                        <span class="material-icons">download</span>
+                        Download Now
+                    </a>
+                    <a href="#features" class="btn btn-outlined ripple-container">
+                        <span class="material-icons">info</span>
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="extension-preview">
+                    <div class="preview-header">
+                        <div class="preview-dots">
+                            <div class="preview-dot red"></div>
+                            <div class="preview-dot yellow"></div>
+                            <div class="preview-dot green"></div>
+                        </div>
+                        <span class="preview-title">Cinemana Downloader</span>
+                    </div>
+                    <div class="preview-body">
+                        <div class="preview-url-bar">
+                            <span class="material-icons">lock</span>
+                            <span class="preview-url">cinemana.shabakaty.com/movie/...</span>
+                        </div>
+                        <div class="preview-feature">
+                            <div class="preview-feature-icon blue">
+                                <span class="material-icons">videocam</span>
+                            </div>
+                            <div class="preview-feature-text">
+                                <h4>Video Download</h4>
+                                <p>تنزيل الفيديو</p>
+                            </div>
+                        </div>
+                        <div class="preview-feature">
+                            <div class="preview-feature-icon red">
+                                <span class="material-icons">subtitles</span>
+                            </div>
+                            <div class="preview-feature-text">
+                                <h4>Subtitle Download</h4>
+                                <p>تنزيل الترجمة</p>
+                            </div>
+                        </div>
+                        <div class="preview-feature">
+                            <div class="preview-feature-icon green">
+                                <span class="material-icons">speed</span>
+                            </div>
+                            <div class="preview-feature-text">
+                                <h4>Fast & Easy</h4>
+                                <p>سريع وسهل</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section features-section" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-overline">Features</p>
+                <h2 class="section-title">Everything You Need</h2>
+                <p class="section-title-ar">كل ما تحتاجه</p>
+                <p class="section-description">
+                    Powerful features to enhance your streaming experience on Cinemana
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon blue">
+                        <span class="material-icons">videocam</span>
+                    </div>
+                    <h3 class="feature-title">Video Download</h3>
+                    <h3 class="feature-title-ar">تنزيل الفيديو</h3>
+                    <p class="feature-description">
+                        Download videos directly from Cinemana in the best available quality with just one click.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon red">
+                        <span class="material-icons">subtitles</span>
+                    </div>
+                    <h3 class="feature-title">Subtitle Download</h3>
+                    <h3 class="feature-title-ar">تنزيل الترجمة</h3>
+                    <p class="feature-description">
+                        Get subtitles for your favorite movies and shows. Download them in multiple languages.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon green">
+                        <span class="material-icons">speed</span>
+                    </div>
+                    <h3 class="feature-title">Fast & Lightweight</h3>
+                    <h3 class="feature-title-ar">سريع وخفيف</h3>
+                    <p class="feature-description">
+                        Optimized for speed and performance. No impact on your browsing experience.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon purple">
+                        <span class="material-icons">shield</span>
+                    </div>
+                    <h3 class="feature-title">Safe & Secure</h3>
+                    <h3 class="feature-title-ar">آمن وموثوق</h3>
+                    <p class="feature-description">
+                        No ads, no trackers, no data collection. Your privacy is our priority.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon orange">
+                        <span class="material-icons">cloud_download</span>
+                    </div>
+                    <h3 class="feature-title">Direct Download</h3>
+                    <h3 class="feature-title-ar">تنزيل مباشر</h3>
+                    <p class="feature-description">
+                        No third-party services or redirects. Download directly from the source.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon teal">
+                        <span class="material-icons">extension</span>
+                    </div>
+                    <h3 class="feature-title">Easy Installation</h3>
+                    <h3 class="feature-title-ar">تثبيت سهل</h3>
+                    <p class="feature-description">
+                        Simple installation process. Works with Chrome and other Chromium-based browsers.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section class="section installation-section" id="installation">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-overline">Installation</p>
+                <h2 class="section-title">Get Started in Minutes</h2>
+                <p class="section-title-ar">ابدأ في دقائق</p>
+                <p class="section-description">
+                    Follow these simple steps to install the extension
+                </p>
+            </div>
+            <div class="installation-content">
+                <div class="installation-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Download the Extension <span>— قم بتنزيل الإضافة</span></h3>
+                            <p>Click the download button below to get the latest version of Cinemana Downloader.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Extract the ZIP File <span>— استخرج ملف ZIP</span></h3>
+                            <p>Unzip the downloaded file to a folder on your computer. Remember where you saved it.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Open Chrome Extensions <span>— افتح إضافات كروم</span></h3>
+                            <p>Navigate to chrome://extensions in your browser and enable Developer Mode.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Load the Extension <span>— قم بتحميل الإضافة</span></h3>
+                            <p>Click "Load unpacked" and select the folder where you extracted the extension files.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Start Downloading <span>— ابدأ التنزيل</span></h3>
+                            <p>Visit cinemana.shabakaty.com and enjoy downloading your favorite content!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="installation-visual">
+                    <div class="download-card">
+                        <div class="download-icon">
+                            <span class="material-icons">download</span>
+                        </div>
+                        <h3 class="download-title">Download Extension</h3>
+                        <p class="download-title-ar">تنزيل الإضافة</p>
+                        <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="download-btn ripple-container" download>
+                            <span class="material-icons">file_download</span>
+                            Download v1.0.0
+                        </a>
+                        <p class="download-info">
+                            <span class="material-icons">info</span>
+                            Version 1.0.0 • Chrome Extension
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="section how-it-works" id="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-overline">How it Works</p>
+                <h2 class="section-title">Simple as 1-2-3-4</h2>
+                <p class="section-title-ar">بسيط كالعد من ١ إلى ٤</p>
+            </div>
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="workflow-icon">
+                        <span class="material-icons">language</span>
+                    </div>
+                    <h3>Visit Cinemana</h3>
+                    <p>Visit cinemana.shabakaty.com</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">
+                        <span class="material-icons">movie</span>
+                    </div>
+                    <h3>Find Content</h3>
+                    <p>Find your movie or show</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">
+                        <span class="material-icons">touch_app</span>
+                    </div>
+                    <h3>Click Download</h3>
+                    <p>Click the download button</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">
+                        <span class="material-icons">check_circle</span>
+                    </div>
+                    <h3>Enjoy!</h3>
+                    <p>Your file is downloading</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Cinemana Downloader</h3>
+                <p>
+                    A free and open-source Chrome extension for downloading videos and subtitles from Cinemana. Built with love by the community.
+                </p>
+                <p style="margin-top: -12px;">
+                    إضافة كروم مجانية ومفتوحة المصدر لتنزيل الفيديوهات والترجمات من سينمانا. صُنعت بحب من المجتمع.
+                </p>
+                <div class="footer-social">
+                    <a href="https://github.com/muhammadALI-14/cinemana-downloader" class="social-btn" target="_blank">
+                        <span class="material-icons">code</span>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#how-it-works">How it Works</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="https://github.com/muhammadALI-14/cinemana-downloader" target="_blank">GitHub</a></li>
+                    <li><a href="https://github.com/muhammadALI-14/cinemana-downloader/releases" target="_blank">Releases</a></li>
+                    <li><a href="https://github.com/muhammadALI-14/cinemana-downloader/issues" target="_blank">Report Issue</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Cinemana Downloader. Open Source under MIT License.</p>
+            <p>Made with ❤️ for the community</p>
+        </div>
+    </footer>
+
+    <!-- FAB Download Button -->
+    <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="fab ripple-container" download title="Download Extension">
+        <span class="material-icons">download</span>
+    </a>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Ripple effect
+        document.querySelectorAll('.ripple-container').forEach(element => {
+            element.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .step-card, .workflow-step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 100;
+                const sectionId = section.getAttribute('id');
+                const navLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
+
+                if (navLink) {
+                    if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                        navLink.classList.add('active');
+                    } else {
+                        navLink.classList.remove('active');
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
