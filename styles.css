@@ -1,0 +1,253 @@
+/* Cinemana Downloader - Button Styles */
+
+.cinemana-download-container {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 15px 20px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  direction: ltr;
+}
+
+.cinemana-download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 0 #660000,
+              0 10px 20px rgba(0, 0, 0, 0.4);
+  transform-style: preserve-3d;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  white-space: nowrap;
+}
+
+.cinemana-download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #660000,
+              0 15px 30px rgba(255, 0, 0, 0.3);
+}
+
+.cinemana-download-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 #660000,
+              0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+.cinemana-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cinemana-download-btn .btn-icon {
+  font-size: 18px;
+}
+
+.cinemana-download-btn .btn-text {
+  font-size: 14px;
+}
+
+/* Button Variations */
+.cinemana-download-btn.btn-episode {
+  background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+  box-shadow: 0 6px 0 #990000,
+              0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.cinemana-download-btn.btn-episode:hover {
+  box-shadow: 0 8px 0 #990000,
+              0 15px 30px rgba(255, 68, 68, 0.3);
+}
+
+.cinemana-download-btn.btn-episode:active {
+  box-shadow: 0 4px 0 #990000,
+              0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+.cinemana-download-btn.btn-movie {
+  background: linear-gradient(135deg, #ff3333 0%, #bb0000 100%);
+  box-shadow: 0 6px 0 #880000,
+              0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.cinemana-download-btn.btn-movie:hover {
+  box-shadow: 0 8px 0 #880000,
+              0 15px 30px rgba(255, 51, 51, 0.3);
+}
+
+.cinemana-download-btn.btn-movie:active {
+  box-shadow: 0 4px 0 #880000,
+              0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+.cinemana-download-btn.btn-subtitle {
+  background: linear-gradient(135deg, #ff6666 0%, #dd2222 100%);
+  box-shadow: 0 6px 0 #bb0000,
+              0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.cinemana-download-btn.btn-subtitle:hover {
+  box-shadow: 0 8px 0 #bb0000,
+              0 15px 30px rgba(255, 102, 102, 0.3);
+}
+
+.cinemana-download-btn.btn-subtitle:active {
+  box-shadow: 0 4px 0 #bb0000,
+              0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Loading Animation */
+.cinemana-download-btn.loading .btn-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Toast Notification */
+.cinemana-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(20, 20, 40, 0.95);
+  color: #fff;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.cinemana-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cinemana-download-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .cinemana-download-btn {
+    width: 100%;
+  }
+}
+
+/* ===== Progress Indicator ===== */
+
+.cinemana-progress-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 15, 30, 0.98);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 15px;
+  padding: 15px 20px;
+  z-index: 99999;
+  min-width: 350px;
+  max-width: 500px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6),
+              0 0 20px rgba(255, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  pointer-events: none;
+}
+
+.cinemana-progress-container.visible {
+  pointer-events: auto;
+}
+
+.cinemana-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cinemana-progress-title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cinemana-progress-close {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 5px;
+  transition: color 0.2s ease;
+}
+
+.cinemana-progress-close:hover {
+  color: #ff4444;
+}
+
+.cinemana-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.cinemana-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff0000, #cc0000);
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.cinemana-progress-text {
+  color: #aaa;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.cinemana-progress-episode {
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Responsive Progress */
+@media (max-width: 500px) {
+  .cinemana-progress-container {
+    min-width: 280px;
+    max-width: 90vw;
+  }
+}
