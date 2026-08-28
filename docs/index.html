@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Design - Cinemana Downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #f9fafb;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: #1f2937;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .card-preview {
+            height: 200px;
+            background: #0d1117;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-preview .design-number {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .card-preview .preview-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+        }
+
+        .card-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to top, #0d1117, transparent);
+        }
+
+        .card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #f9fafb;
+        }
+
+        .card-content p {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            background: #374151;
+            color: #d1d5db;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #374151;
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 700px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Choose Your Design</h1>
+            <p>Select a landing page style for Cinemana Downloader</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">01</span>
+                    <div class="preview-icon">&#127916;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Dark Cinema Theme</h3>
+                    <p>Deep dark tones with cinematic gradients. Perfect for a movie downloader app with a premium feel.</p>
+                    <div class="card-tags">
+                        <span class="tag">Dark</span>
+                        <span class="tag">Cinematic</span>
+                        <span class="tag">Premium</span>
+                    </div>
+                    <a href="design-1-dark-cinema.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">02</span>
+                    <div class="preview-icon">&#9711;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Clean Minimal White</h3>
+                    <p>Bright, clean, and minimal. A white-based design focused on clarity and simplicity.</p>
+                    <div class="card-tags">
+                        <span class="tag">Minimal</span>
+                        <span class="tag">White</span>
+                        <span class="tag">Clean</span>
+                    </div>
+                    <a href="design-2-minimal.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">03</span>
+                    <div class="preview-icon">&#9654;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Gradient Modern</h3>
+                    <p>Modern gradient backgrounds with smooth color transitions. Trendy and eye-catching.</p>
+                    <div class="card-tags">
+                        <span class="tag">Gradient</span>
+                        <span class="tag">Modern</span>
+                        <span class="tag">Vibrant</span>
+                    </div>
+                    <a href="design-3-gradient.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">04</span>
+                    <div class="preview-icon">&#9889;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Retro Neon / Cyberpunk</h3>
+                    <p>Neon glow effects with cyberpunk aesthetics. Bold, vibrant, and futuristic.</p>
+                    <div class="card-tags">
+                        <span class="tag">Neon</span>
+                        <span class="tag">Cyberpunk</span>
+                        <span class="tag">Retro</span>
+                    </div>
+                    <a href="design-4-neon.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">05</span>
+                    <div class="preview-icon">&#9782;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Material Design</h3>
+                    <p>Google's Material Design principles with elevation, ripple effects, and clean surfaces.</p>
+                    <div class="card-tags">
+                        <span class="tag">Material</span>
+                        <span class="tag">Elevation</span>
+                        <span class="tag">Clean</span>
+                    </div>
+                    <a href="design-5-material.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">06</span>
+                    <div class="preview-icon">&#10024;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Glassmorphism</h3>
+                    <p>Frosted glass effects with translucent layers and subtle blur. Modern and elegant.</p>
+                    <div class="card-tags">
+                        <span class="tag">Glass</span>
+                        <span class="tag">Blur</span>
+                        <span class="tag">Modern</span>
+                    </div>
+                    <a href="design-6-glass.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">07</span>
+                    <div class="preview-icon">&#11035;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Bold Typography</h3>
+                    <p>Typography-driven design with oversized headings and strong visual hierarchy.</p>
+                    <div class="card-tags">
+                        <span class="tag">Typography</span>
+                        <span class="tag">Bold</span>
+                        <span class="tag">Editorial</span>
+                    </div>
+                    <a href="design-7-typography.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">08</span>
+                    <div class="preview-icon">&#8861;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Split Screen</h3>
+                    <p>Two-column layout with contrasting sides. Great for showing features alongside visuals.</p>
+                    <div class="card-tags">
+                        <span class="tag">Split</span>
+                        <span class="tag">Dual</span>
+                        <span class="tag">Balanced</span>
+                    </div>
+                    <a href="design-8-split.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">09</span>
+                    <div class="preview-icon">&#9632;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Card Based Bento</h3>
+                    <p>Bento grid layout with modular cards. Trendy, organized, and visually appealing.</p>
+                    <div class="card-tags">
+                        <span class="tag">Bento</span>
+                        <span class="tag">Grid</span>
+                        <span class="tag">Modular</span>
+                    </div>
+                    <a href="design-9-cards.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-preview">
+                    <span class="design-number">10</span>
+                    <div class="preview-icon">&#1575;</div>
+                </div>
+                <div class="card-content">
+                    <h3>Arabic RTL Design</h3>
+                    <p>Right-to-left layout with Arabic typography. Tailored for Arabic-speaking audiences.</p>
+                    <div class="card-tags">
+                        <span class="tag">RTL</span>
+                        <span class="tag">Arabic</span>
+                        <span class="tag">Localized</span>
+                    </div>
+                    <a href="design-10-arabic.html" target="_blank" class="btn">
+                        Open Design
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Cinemana Downloader &mdash; Select a design to preview</p>
+        </footer>
+    </div>
+</body>
+</html>
