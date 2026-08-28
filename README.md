@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # 🎬 Cinemana Downloader
 
@@ -143,9 +143,9 @@ MIT License — Feel free to modify and distribute.
 
 ---
 
-# 🎬 سيمنا داونلودر
+# 🎬 سينمانا داونلودر
 
-### إضافة كروم لتحميل الفيديو والترجمة من سيمنا
+### إضافة كروم لتحميل الفيديو والترجمة من سينمانا
 
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow)
@@ -157,7 +157,7 @@ MIT License — Feel free to modify and distribute.
 
 ## 📖 الوصف
 
-**سيمنا داونلودر** هي إضافة قوية لمتصفح كروم (الإصدار الثالث من المُ澄ِّف) تتيح لك تحميل الفيديو والترجمة مباشرة من [cinemana.shabakaty.com](https://cinemana.shabakaty.com). تكشف تلقائيًا عما إذا كان المحتوى مسلسلًا أو فيلمًا وتوفر تجربة تحميل سلسة مع خيارات مخصصة للجودة والصيغة.
+**سينمانا داونلودر** هي إضافة قوية لمتصفح كروم (الإصدار الثالث) تتيح لك تحميل الفيديو والترجمة مباشرة من [cinemana.shabakaty.com](https://cinemana.shabakaty.com). تكشف تلقائيًا عما إذا كان المحتوى مسلسلًا أو فيلمًا وتوفر تجربة تحميل سلسة مع خيارات مخصصة للجودة والصيغة.
 
 ---
 
