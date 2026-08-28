@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سينمانا داونلودر - تحميل فيديوهات وترجمة من سينمانا</title>
+  <meta name="description" content="امتداد كروم لتحميل الفيديوهات والترجمة من cinemana.shabakaty.com بجودات متعددة">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #f59e0b;
+      --gold-dark: #d97706;
+      --gold-light: #fbbf24;
+      --gold-glow: rgba(245, 158, 11, 0.3);
+      --dark-900: #0a0a0f;
+      --dark-800: #111118;
+      --dark-700: #1a1a24;
+      --dark-600: #242430;
+      --dark-500: #2e2e3c;
+      --text-primary: #f5f5f7;
+      --text-secondary: #a1a1b5;
+      --text-muted: #6b6b80;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
+      background-color: var(--dark-900);
+      color: var(--text-primary);
+      direction: rtl;
+      text-align: right;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* Islamic geometric pattern background */
+    .pattern-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.03;
+      background-image:
+        repeating-conic-gradient(
+          var(--gold) 0% 25%,
+          transparent 0% 50%
+        );
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .pattern-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(217, 119, 6, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(10, 10, 15, 0.9) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Calligraphy decorative element */
+    .calligraphy-divider {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--gold);
+      opacity: 0.3;
+      margin: 2rem 0;
+      letter-spacing: 0.5em;
+      font-family: serif;
+      user-select: none;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      padding: 0.7rem 2rem;
+      background: rgba(10, 10, 15, 0.95);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--dark-900);
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .nav-title {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-900) !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: transform 0.2s, box-shadow 0.3s !important;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px var(--gold-glow);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-content {
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      color: var(--gold);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 900;
+      font-size: 3.5rem;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--gold-light) 50%, var(--gold) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+      max-width: 500px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-900);
+      padding: 1rem 2.25rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      font-family: 'Tajawal', sans-serif;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--gold-glow), 0 0 60px rgba(245, 158, 11, 0.15);
+    }
+
+    .btn-primary svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: var(--gold);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-item {
+      text-align: right;
+    }
+
+    .stat-value {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--gold);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Hero Visual */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .browser-mockup {
+      width: 100%;
+      max-width: 520px;
+      background: var(--dark-700);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 80px rgba(245, 158, 11, 0.05);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.5s ease;
+    }
+
+    .browser-mockup:hover {
+      transform: perspective(1000px) rotateY(-2deg) rotateX(1deg);
+    }
+
+    .browser-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1rem;
+      background: var(--dark-600);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--dark-500);
+    }
+
+    .browser-dot:first-child { background: #ef4444; }
+    .browser-dot:nth-child(2) { background: #eab308; }
+    .browser-dot:last-child { background: #22c55e; }
+
+    .browser-url {
+      flex: 1;
+      background: var(--dark-800);
+      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-family: monospace;
+    }
+
+    .browser-body {
+      padding: 1.5rem;
+      min-height: 300px;
+      background: var(--dark-800);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .mock-video-card {
+      background: var(--dark-700);
+      border-radius: 10px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .mock-video-thumb {
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(135deg, var(--dark-600), var(--dark-500));
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mock-video-thumb::after {
+      content: '▶';
+      font-size: 2rem;
+      color: var(--gold);
+      opacity: 0.6;
+    }
+
+    .mock-download-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(245, 158, 11, 0.08);
+      border-radius: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.15);
+    }
+
+    .mock-download-btn {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-900);
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .mock-quality {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .mock-progress {
+      width: 100%;
+      height: 4px;
+      background: var(--dark-500);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .mock-progress-bar {
+      width: 65%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      border-radius: 2px;
+      animation: progress-move 3s ease-in-out infinite;
+    }
+
+    @keyframes progress-move {
+      0% { width: 30%; }
+      50% { width: 85%; }
+      100% { width: 30%; }
+    }
+
+    .floating-badge {
+      position: absolute;
+      background: var(--dark-700);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 12px;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .floating-badge.top-right {
+      top: -15px;
+      left: -15px;
+      animation-delay: 0s;
+    }
+
+    .floating-badge.bottom-left {
+      bottom: -10px;
+      right: -10px;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Section styles */
+    section {
+      padding: 5rem 2rem;
+      position: relative;
+    }
+
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section-header .accent-line {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      margin: 1rem auto 0;
+      border-radius: 2px;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: linear-gradient(145deg, rgba(26, 26, 36, 0.8), rgba(17, 17, 24, 0.8));
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, var(--gold-glow), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(245, 158, 11, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(245, 158, 11, 0.1);
+    }
+
+    .feature-card h3 {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    /* How it works */
+    .steps-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .steps-container::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      right: 15%;
+      left: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-glow), transparent);
+      z-index: 0;
+    }
+
+    .step-card {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-number {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--dark-700), var(--dark-800));
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--gold);
+      transition: all 0.3s;
+    }
+
+    .step-card:hover .step-number {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border-color: var(--gold);
+      box-shadow: 0 0 30px var(--gold-glow);
+    }
+
+    .step-card h3 {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* Download CTA */
+    .cta-section {
+      padding: 5rem 2rem;
+    }
+
+    .cta-box {
+      max-width: 800px;
+      margin: 0 auto;
+      background: linear-gradient(145deg, rgba(26, 26, 36, 0.9), rgba(17, 17, 24, 0.9));
+      border: 1px solid rgba(245, 158, 11, 0.15);
+      border-radius: 24px;
+      padding: 4rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(245, 158, 11, 0.05), transparent 50%);
+      animation: rotate-glow 10s linear infinite;
+    }
+
+    @keyframes rotate-glow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .cta-box > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-box h2 {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 800;
+      font-size: 2.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta-box p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-btn-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-900);
+      padding: 1.25rem 3rem;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.2rem;
+      font-family: 'Tajawal', sans-serif;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-btn-large:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px var(--gold-glow), 0 0 80px rgba(245, 158, 11, 0.1);
+    }
+
+    .cta-btn-large svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .cta-version {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(10, 10, 15, 0.5);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--dark-900);
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .footer-text {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    .footer-links a svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .footer-links .github-link {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-links .github-link:hover {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      .hero-stats {
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 2.75rem;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps-container::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .section-header h2 {
+        font-size: 2rem;
+      }
+
+      .steps-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .cta-box {
+        padding: 3rem 1.5rem;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* Scroll animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pattern-bg"></div>
+  <div class="pattern-overlay"></div>
+
+  <div class="content-wrapper">
+
+    <!-- Navigation -->
+    <nav id="navbar">
+      <div class="nav-container">
+        <a href="#" class="nav-brand">
+          <div class="nav-logo">سـ</div>
+          <span class="nav-title">سينمانا داونلودر</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#features">المميزات</a></li>
+          <li><a href="#how-it-works">كيف يعمل</a></li>
+          <li><a href="#download" class="nav-cta">تحميل مجاني</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span>إصدار v1.0.0 — متاح الآن</span>
+          </div>
+          <h1>سينمانا داونلودر</h1>
+          <p class="hero-subtitle">
+            حمّل فيديوهات وترجمة من سينمانا بسهولة. امتداد كروم خفيف وسريع يكشف الفيديو تلقائياً ويعرض خيارات التحميل بجودات متعددة.
+          </p>
+          <div class="hero-actions">
+            <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="btn-primary" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              تحميل مجاني
+            </a>
+            <a href="https://github.com/muhammadALI-14/cinemana-downloader" class="btn-secondary" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              الكود المصدري
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-value">مجاني</div>
+              <div class="stat-label">كود مصدري مفتوح</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">خفي</div>
+              <div class="stat-label">لا يبطئ المتصفح</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">سريع</div>
+              <div class="stat-label">كشف فوري</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="browser-mockup">
+            <div class="browser-header">
+              <div class="browser-dots">
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+              </div>
+              <div class="browser-url">cinemana.shabakaty.com</div>
+            </div>
+            <div class="browser-body">
+              <div class="mock-video-card">
+                <div class="mock-video-thumb"></div>
+                <div class="mock-download-bar">
+                  <span class="mock-quality">720p • MP4</span>
+                  <span class="mock-download-btn">تحميل</span>
+                </div>
+                <div class="mock-progress">
+                  <div class="mock-progress-bar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="floating-badge top-right">
+            <span>🔍</span> كشف تلقائي
+          </div>
+          <div class="floating-badge bottom-left">
+            <span>📝</span> ترجمة SRT
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="calligraphy-divider">◆ ◆ ◆</div>
+
+    <!-- Features Section -->
+    <section id="features">
+      <div class="section-container">
+        <div class="section-header fade-in">
+          <h2>مميزات قوية وبسيطة</h2>
+          <p>كل ما تحتاجه لتحميل محتوى سينمانا في مكان واحد</p>
+          <div class="accent-line"></div>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card fade-in">
+            <div class="feature-icon">🔍</div>
+            <h3>كشف تلقائي</h3>
+            <p>يكتشف الفيديو والترجمة تلقائياً عند فتح أي صفحة فيديو على سينمانا. لا حاجة للبحث يدوياً — الأيقونة تظهر مباشرة فوق الفيديو.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <div class="feature-icon">🎯</div>
+            <h3>جودات متعددة</h3>
+            <p>اختر من بين جودات مختلفة متاحة للتحميل: 360p، 480p، 720p، 1080p. اختر الجودة المناسبة ل velocidade اتصالك ومساحة التخزين.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <div class="feature-icon">📝</div>
+            <h3>تحميل الترجمة</h3>
+            <p>حمّل ملفات الترجمة بصيغة SRT مع الفيديو مباشرة. مثالي لمن يريد مشاهدة المحتوى بلغة مختلفة أو للمشاهدين ذوي الاحتياجات الخاصة.</p>
+          </div>
+          <div class="feature-card fade-in">
+            <div class="feature-icon">📁</div>
+            <h3>أسماء ملفات ذكية</h3>
+            <p>أسماء ملفات منظمة تلقائياً تشمل اسم الفيديو والجودة والتاريخ. لا مزيد من الفوضى في مجلد التنزيلات.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="calligraphy-divider">✦ ✦ ✦</div>
+
+    <!-- How It Works -->
+    <section id="how-it-works">
+      <div class="section-container">
+        <div class="section-header fade-in">
+          <h2>كيف يعمل؟</h2>
+          <p>أربعة خطوات بسيطة للبدء</p>
+          <div class="accent-line"></div>
+        </div>
+
+        <div class="steps-container">
+          <div class="step-card fade-in">
+            <div class="step-number">١</div>
+            <h3>حمّل الامتداد</h3>
+            <p>حمّل ملف ZIP من GitHub وفك الضغط</p>
+          </div>
+          <div class="step-card fade-in">
+            <div class="step-number">٢</div>
+            <h3>ثبّته على كروم</h3>
+            <p>افتح chrome://extensions وفعّل وضع المطور</p>
+          </div>
+          <div class="step-card fade-in">
+            <div class="step-number">٣</div>
+            <h3>افتح فيديو</h3>
+            <p>انتقل إلى أي فيديو على سينمانا</p>
+          </div>
+          <div class="step-card fade-in">
+            <div class="step-number">٤</div>
+            <h3>حمّل و استمتع</h3>
+            <p>اضغط زر التحميل واختر الجودة</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-box fade-in">
+        <h2>جاهز للتحميل؟</h2>
+        <p>امتداد مفتوح المصدر، مجاني تماماً، بلا إعلانات أو تعقب. حمّله الآن وابدأ التحميل.</p>
+        <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="cta-btn-large" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          تحميل الإصدار v1.0.0
+        </a>
+        <p class="cta-version">الحجم: ~15 KB • متاح مع كروم 88+</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-container">
+        <div class="footer-brand">
+          <div class="footer-logo">سـ</div>
+          <span class="footer-text">سينمانا داونلودر — مفتوح المصدر</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/muhammadALI-14/cinemana-downloader" target="_blank" rel="noopener" class="github-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Fade in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
