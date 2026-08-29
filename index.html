@@ -1,0 +1,1093 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinemana Downloader - سينمانا داونلودر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #111118;
+  --bg-card: #16161f;
+  --red-primary: #dc2626;
+  --red-dark: #991b1b;
+  --red-glow: #ef4444;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --border-color: #27272a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+html[dir="rtl"] body,
+html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3, html[dir="rtl"] h4 {
+  font-family: 'Tajawal', 'Inter', sans-serif;
+}
+
+html[dir="ltr"] body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', serif;
+}
+
+html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3, html[dir="rtl"] h4 {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ===== NAVIGATION BAR ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 9999;
+  transition: background 0.3s ease;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.navbar-logo svg {
+  width: 28px;
+  height: 28px;
+  color: var(--red-primary);
+}
+
+.navbar-logo span {
+  font-family: 'Playfair Display', serif;
+  background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html[dir="rtl"] .navbar-logo span {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.lang-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 100px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10000;
+}
+
+.lang-toggle:hover {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.6);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
+}
+
+.lang-toggle:active {
+  transform: scale(0.97);
+}
+
+.lang-toggle-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--red-primary);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.lang-toggle-icon {
+  width: 18px;
+  height: 18px;
+  margin-left: 0.5rem;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--red-primary);
+}
+
+html[dir="rtl"] .lang-toggle-icon {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.lang-toggle:hover .lang-toggle-icon {
+  transform: rotate(20deg);
+}
+
+/* ===== BODY PADDING FOR NAVBAR ===== */
+body {
+  padding-top: 60px;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(220,38,38,0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(153,27,27,0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 60%, rgba(153,27,27,0.08), transparent);
+  z-index: 0;
+}
+
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-particles span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--red-primary);
+  border-radius: 50%;
+  animation: float-up linear infinite;
+  opacity: 0;
+}
+
+@keyframes float-up {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.2rem;
+  background: rgba(220,38,38,0.1);
+  border: 1px solid rgba(220,38,38,0.3);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  color: var(--red-primary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--red-primary);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(220,38,38,0.7); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(220,38,38,0); }
+}
+
+.hero-title {
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.hero-title .line1 {
+  display: block;
+  background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-title .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--red-primary) 0%, var(--red-glow) 50%, #fca5a5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 300;
+  color: var(--text-muted);
+  margin-bottom: 3rem;
+  animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+html[dir="rtl"] .hero-subtitle {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--text-secondary);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2.2rem;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+html[dir="rtl"] .btn {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+  color: #fff;
+  box-shadow: 0 4px 30px rgba(220,38,38,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(220,38,38,0.5);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.btn-primary:hover::after {
+  transform: translateX(100%);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  border-color: var(--red-primary);
+  background: rgba(220,38,38,0.05);
+  transform: translateY(-2px);
+}
+
+.btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.hero-film-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  z-index: 0;
+  display: flex;
+  overflow: hidden;
+  opacity: 0.06;
+}
+
+.film-frame {
+  flex: 0 0 80px;
+  height: 100%;
+  border: 2px solid var(--text-primary);
+  margin: 0 4px;
+  position: relative;
+}
+
+.film-frame::before, .film-frame::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--text-primary);
+  border-radius: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.film-frame::before { top: 6px; }
+.film-frame::after { bottom: 6px; }
+
+/* ===== SECTION SHARED ===== */
+section {
+  padding: 6rem 2rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-primary);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+}
+
+/* ===== FEATURES ===== */
+.features {
+  background: var(--bg-secondary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.feature-card:hover {
+  border-color: rgba(220,38,38,0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+.feature-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(220,38,38,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+  font-size: 1.5rem;
+}
+
+.feature-card h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+html[dir="rtl"] .feature-card h3 {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* ===== INSTALLATION ===== */
+.installation {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--red-primary), var(--border-color));
+}
+
+html[dir="rtl"] .steps::before {
+  left: auto;
+  right: 28px;
+}
+
+.step {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  position: relative;
+}
+
+.step-number {
+  flex: 0 0 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--red-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--red-primary);
+  z-index: 1;
+  position: relative;
+}
+
+html[dir="rtl"] .step-number {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.step-content {
+  flex: 1;
+  padding-top: 0.5rem;
+}
+
+.step-content h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+html[dir="rtl"] .step-content h3 {
+  font-family: 'Tajawal', sans-serif;
+}
+
+.step-content p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.step-content code {
+  background: rgba(220,38,38,0.1);
+  color: #fca5a5;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* ===== SCREENSHOT / DEMO ===== */
+.demo-section {
+  background: var(--bg-secondary);
+  text-align: center;
+}
+
+.demo-window {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+
+.demo-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.demo-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.demo-dot:nth-child(1) { background: #ef4444; }
+.demo-dot:nth-child(2) { background: #eab308; }
+.demo-dot:nth-child(3) { background: #22c55e; }
+
+.demo-url {
+  flex: 1;
+  margin-left: 12px;
+  padding: 6px 16px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: 'Inter', monospace;
+}
+
+html[dir="rtl"] .demo-url {
+  margin-left: 0;
+  margin-right: 12px;
+}
+
+.demo-body {
+  padding: 2rem;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-placeholder {
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.demo-placeholder svg {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+/* ===== STATS ===== */
+.stats {
+  background: var(--bg-primary);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stat-item h3 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--red-primary);
+  margin-bottom: 0.3rem;
+}
+
+.stat-item p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  padding: 3rem 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.footer-links a:hover {
+  color: var(--red-primary);
+}
+
+.footer-copy {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.footer-copy span {
+  color: var(--red-primary);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.7s ease-out;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RTL LAYOUT ADJUSTMENTS ===== */
+html[dir="rtl"] .hero-actions {
+  direction: rtl;
+}
+
+html[dir="rtl"] .btn svg {
+  order: 1;
+}
+
+html[dir="rtl"] .step {
+  flex-direction: row;
+}
+
+html[dir="rtl"] .step-number {
+  order: 1;
+}
+
+html[dir="rtl"] .step-content {
+  text-align: right;
+}
+
+html[dir="rtl"] .features-grid {
+  direction: rtl;
+}
+
+html[dir="rtl"] .feature-card h3 {
+  text-align: right;
+}
+
+html[dir="rtl"] .feature-card p {
+  text-align: right;
+}
+
+/* ===== RTL: Steps Line ===== */
+html[dir="rtl"] .steps::before {
+  left: auto;
+  right: 28px;
+}
+
+html[dir="rtl"] .step-number {
+  order: 1;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+html[dir="rtl"] .step {
+  flex-direction: row-reverse;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero { min-height: 90vh; padding: 1.5rem; }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .btn { width: 100%; justify-content: center; max-width: 320px; }
+  section { padding: 4rem 1.2rem; }
+  .steps::before { left: 20px; }
+  html[dir="rtl"] .steps::before { left: auto; right: 20px; }
+  .step-number { width: 42px; height: 42px; font-size: 1rem; flex: 0 0 42px; }
+  .step { gap: 1rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .navbar { padding: 0 1rem; }
+  .lang-toggle { padding: 0.3rem 0.8rem; }
+  .lang-toggle-text { font-size: 0.78rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 2.5rem; }
+  .hero-subtitle { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION BAR ===== -->
+<nav class="navbar">
+  <a href="#" class="navbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <polygon points="10 8 16 12 10 16 10 8"/>
+    </svg>
+    <span data-en="Cinemana" data-ar="سينمانا">Cinemana</span>
+  </a>
+  <div class="lang-toggle" id="langToggle" onclick="toggleLanguage()">
+    <span class="lang-toggle-text" id="langToggleText">عربي</span>
+    <svg class="lang-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-particles" id="particles"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge" data-en="Chrome Extension" data-ar="إضافة كروم">Chrome Extension</div>
+
+    <h1 class="hero-title">
+      <span class="line1" data-en="Cinemana" data-ar="سينمانا">Cinemana</span>
+      <span class="line2" data-en="Downloader" data-ar="داونلودر">Downloader</span>
+    </h1>
+
+    <p class="hero-subtitle" data-en="Download videos &amp; subtitles from Cinemana" data-ar="حمّل فيديوهات وترجمة من سينمانا">Download videos &amp; subtitles from Cinemana</p>
+
+    <div class="hero-actions">
+      <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases/download/v1.0.0/cinemana-downloader-v1.0.0.zip" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span data-en="Download v1.0.0" data-ar="تحميل v1.0.0">Download v1.0.0</span>
+      </a>
+      <a href="https://github.com/muhammadALI-14/cinemana-downloader" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        <span data-en="View on GitHub" data-ar="عرض على GitHub">View on GitHub</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-film-strip">
+    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
+    <div class="film-frame"></div><div class="film-frame"></div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag" data-en="Features" data-ar="المميزات">Features</span>
+    <h2 class="section-title" data-en="Everything You Need" data-ar="كل ما تحتاجه">Everything You Need</h2>
+    <p class="section-desc" data-en="A powerful Chrome extension designed for Cinemana users who want offline access to their favorite content." data-ar="إضافة كروم قوية مصممة لمستخدمي سينمانا الذين يريدون الوصول بدون إنترنت إلى محتواهم المفضل.">A powerful Chrome extension designed for Cinemana users who want offline access to their favorite content.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      </div>
+      <h3 data-en="Auto-Detect Content" data-ar="كشف تلقائي للمحتوى">Auto-Detect Content</h3>
+      <p data-en="Automatically detects whether you're viewing a series or a movie and adjusts download options accordingly." data-ar="يكتشف تلقائيًا ما إذا كنت تشاهد مسلسلًا أو فيلماً ويعدّل خيارات التحميل بناءً على ذلك.">Automatically detects whether you're viewing a series or a movie and adjusts download options accordingly.</p>
+    </div>
+
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h3 data-en="Multiple Qualities" data-ar="جودات متعددة">Multiple Qualities</h3>
+      <p data-en="Choose from available video qualities to match your bandwidth and storage preferences." data-ar="اختر من جودات الفيديو المتاحة لتتناسب مع سرعة الإنترنت والمساحة المتاحة لديك.">Choose from available video qualities to match your bandwidth and storage preferences.</p>
+    </div>
+
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg>
+      </div>
+      <h3 data-en="Subtitle Download" data-ar="تحميل الترجمة">Subtitle Download</h3>
+      <p data-en="Download embedded subtitles alongside videos so you never miss a line of dialogue." data-ar="حمّل الترجمات المضمنة مع الفيديوهات حتى لا تفوتك أي سطر من الحوارات.">Download embedded subtitles alongside videos so you never miss a line of dialogue.</p>
+    </div>
+
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <h3 data-en="Smart Filenames" data-ar="تسمية ذكية للملفات">Smart Filenames</h3>
+      <p data-en="Files are named intelligently with show title, season, episode, and quality for easy organization." data-ar="يتم تسمية الملفات بذكاء مع عنوان المسلسل والموسم والحلقة والجودة لتنظيم سهل.">Files are named intelligently with show title, season, episode, and quality for easy organization.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEMO ===== -->
+<section class="demo-section">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag" data-en="Preview" data-ar="معاينة">Preview</span>
+    <h2 class="section-title" data-en="See It In Action" data-ar="شاهد العرض">See It In Action</h2>
+  </div>
+
+  <div class="demo-window animate-on-scroll">
+    <div class="demo-topbar">
+      <div class="demo-dot"></div>
+      <div class="demo-dot"></div>
+      <div class="demo-dot"></div>
+      <div class="demo-url">cinemana.shabakaty.com</div>
+    </div>
+    <div class="demo-body">
+      <div class="demo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <p style="font-size:0.9rem;" data-en="Extension popup appears on Cinemana pages" data-ar="تظهر نافذة الإضافة على صفحات سينمانا">Extension popup appears on Cinemana pages</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INSTALLATION ===== -->
+<section class="installation">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag" data-en="Installation" data-ar="التثبيت">Installation</span>
+    <h2 class="section-title" data-en="Get Started in Minutes" data-ar="ابدأ في دقائق">Get Started in Minutes</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step animate-on-scroll">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3 data-en="Download the Extension" data-ar="حمّل الإضافة">Download the Extension</h3>
+        <p data-en='Click the <strong>Download v1.0.0</strong> button above to get the <code>.zip</code> file from GitHub Releases.' data-ar='اضغط على زر <strong>تحميل v1.0.0</strong> أعلاه للحصول على ملف <code>.zip</code> من إصدارات GitHub.'>Click the <strong>Download v1.0.0</strong> button above to get the <code>.zip</code> file from GitHub Releases.</p>
+      </div>
+    </div>
+
+    <div class="step animate-on-scroll">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3 data-en="Extract the ZIP File" data-ar="استخرج ملف ZIP">Extract the ZIP File</h3>
+        <p data-en="Unzip the downloaded file to a folder you'll remember. Keep it somewhere permanent — don't delete it after installation." data-ar="افتح ملف ZIP الذي حمّلته في مجلد تذكره. احتفظ به في مكان دائم — لا تحذفه بعد التثبيت.">Unzip the downloaded file to a folder you'll remember. Keep it somewhere permanent — don't delete it after installation.</p>
+      </div>
+    </div>
+
+    <div class="step animate-on-scroll">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3 data-en="Open Chrome Extensions" data-ar="افتح صفحة إضافات كروم">Open Chrome Extensions</h3>
+        <p data-en='Navigate to <code>chrome://extensions</code> in your Chrome address bar and enable <strong>Developer mode</strong> using the toggle in the top-right corner.' data-ar='انتقل إلى <code>chrome://extensions</code> في شريط عنوان كروم وفعّل <strong>وضع المطور</strong> باستخدام الزر في الزاوية العلوية اليمنى.'>Navigate to <code>chrome://extensions</code> in your Chrome address bar and enable <strong>Developer mode</strong> using the toggle in the top-right corner.</p>
+      </div>
+    </div>
+
+    <div class="step animate-on-scroll">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3 data-en="Load Unpacked Extension" data-ar="أضف الإضافة">Load Unpacked Extension</h3>
+        <p data-en='Click <strong>"Load unpacked"</strong> and select the folder you extracted in Step 2. The extension icon should appear in your toolbar.' data-ar='اضغط على <strong>"Load unpacked"</strong> واختر المجلد الذي استخرجته في الخطوة 2. يجب أن يظهر أيقونة الإضافة في شريط الأدوات.'>Click <strong>"Load unpacked"</strong> and select the folder you extracted in Step 2. The extension icon should appear in your toolbar.</p>
+      </div>
+    </div>
+
+    <div class="step animate-on-scroll">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <h3 data-en="Start Downloading" data-ar="ابدأ التحميل">Start Downloading</h3>
+        <p data-en='Visit any video page on <code>cinemana.shabakaty.com</code> and the download button will appear automatically. Enjoy offline viewing!' data-ar='قم بزيارة أي صفحة فيديو على <code>cinemana.shabakaty.com</code> وسيظهر زر التحميل تلقائيًا. استمتع بالمشاهدة بدون إنترنت!'>Visit any video page on <code>cinemana.shabakaty.com</code> and the download button will appear automatically. Enjoy offline viewing!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat-item animate-on-scroll">
+      <h3>v1.0</h3>
+      <p data-en="Latest Version" data-ar="أحدث إصدار">Latest Version</p>
+    </div>
+    <div class="stat-item animate-on-scroll">
+      <h3>100%</h3>
+      <p data-en="Free &amp; Open Source" data-ar="مجاني ومفتوح المصدر">Free &amp; Open Source</p>
+    </div>
+    <div class="stat-item animate-on-scroll">
+      <h3>0</h3>
+      <p data-en="No Ads or Trackings" data-ar="بدون إعلانات أو تتبع">No Ads or Trackings</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-links">
+    <a href="https://github.com/muhammadALI-14/cinemana-downloader">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      GitHub
+    </a>
+    <a href="https://github.com/muhammadALI-14/cinemana-downloader/releases">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span data-en="Releases" data-ar="الإصدارات">Releases</span>
+    </a>
+    <a href="https://github.com/muhammadALI-14/cinemana-downloader/issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span data-en="Report Issue" data-ar="الإبلاغ عن مشكلة">Report Issue</span>
+    </a>
+    <a href="https://github.com/muhammadALI-14/cinemana-downloader/blob/main/LICENSE">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span data-en="License" data-ar="الرخصة">License</span>
+    </a>
+  </div>
+  <p class="footer-copy" data-en='Cinemana Downloader &mdash; Built with <span>&hearts;</span> by <a href="https://github.com/muhammadALI-14" style="color:var(--text-secondary); text-decoration:none;">muhammadALI-14</a>' data-ar='سينمانا داونلودر &mdash; صُنع بـ <span>&hearts;</span> بواسطة <a href="https://github.com/muhammadALI-14" style="color:var(--text-secondary); text-decoration:none;">muhammadALI-14</a>'>Cinemana Downloader &mdash; Built with <span>&hearts;</span> by <a href="https://github.com/muhammadALI-14" style="color:var(--text-secondary); text-decoration:none;">muhammadALI-14</a></p>
+</footer>
+
+<script>
+// Language toggle
+let currentLang = localStorage.getItem('cinemana-lang') || 'en';
+
+function toggleLanguage() {
+  currentLang = currentLang === 'en' ? 'ar' : 'en';
+  localStorage.setItem('cinemana-lang', currentLang);
+  applyLanguage(currentLang);
+}
+
+function applyLanguage(lang) {
+  const html = document.documentElement;
+  const toggleText = document.getElementById('langToggleText');
+
+  if (lang === 'ar') {
+    html.setAttribute('dir', 'rtl');
+    html.setAttribute('lang', 'ar');
+    toggleText.textContent = 'English';
+  } else {
+    html.setAttribute('dir', 'ltr');
+    html.setAttribute('lang', 'en');
+    toggleText.textContent = 'عربي';
+  }
+
+  document.querySelectorAll('[data-en][data-ar]').forEach(el => {
+    const text = el.getAttribute('data-' + lang);
+    if (text !== null) {
+      el.innerHTML = text;
+    }
+  });
+
+  document.title = lang === 'ar' ? 'سينمانا داونلودر - Cinemana Downloader' : 'Cinemana Downloader - سينمانا داونلودر';
+}
+
+// Particle effect
+(function(){
+  const container = document.getElementById('particles');
+  const count = 40;
+  for(let i = 0; i < count; i++){
+    const span = document.createElement('span');
+    span.style.left = Math.random() * 100 + '%';
+    span.style.animationDuration = (Math.random() * 8 + 6) + 's';
+    span.style.animationDelay = (Math.random() * 10) + 's';
+    span.style.width = span.style.height = (Math.random() * 2 + 1) + 'px';
+    container.appendChild(span);
+  }
+})();
+
+// Scroll animations
+(function(){
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+})();
+
+// Apply saved language on load
+applyLanguage(currentLang);
+</script>
+
+</body>
+</html>
