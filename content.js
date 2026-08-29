@@ -345,7 +345,7 @@ function createDownloadButton(type, text, icon) {
   btn.appendChild(iconSpan);
   btn.appendChild(textSpan);
   
-  btn.addEventListener("click", handleDownload);
+  btn.addEventListener("click", () => handleDownload(btn.getAttribute("data-type")));
   return btn;
 }
 
